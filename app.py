@@ -3,29 +3,16 @@ import validators
 from langchain_classic.prompts import PromptTemplate
 from langchain_groq import ChatGroq
 from langchain_classic.chains.summarize import load_summarize_chain
-from langchain_community.document_loaders import YoutubeLoader,UnstructuredURLLoader
+from langchain_community.document_loaders import YoutubeLoader, UnstructuredURLLoader
 
-
-st.set_page_config(page_title="Langchain : Summarize Text From YT or Website",page_icon="🦜")
+st.set_page_config(page_title="Langchain : Summarize Text From YT or Website", page_icon="🦜")
 st.title("🦜 Langchain : Summarize Text From YT or Website")
 st.subheader('Summarize URL')
 
 with st.sidebar:
-    groq_api_key = st.text_input("Groq API Key",value="",type="password")
+    groq_api_key = st.text_input("Groq API Key", value="", type="password")
 
-generic_url = st.text_input("URL",label_visibility="collapsed")
-
-llm = ChatGroq(model="llama-3.3-70b-versatile",api_key=groq_api_key)
-
-prompt_template = """
-Provide a summary of the following content in 300 words:
-content : {text}
-"""
-prompt = PromptTemplate(template = prompt_template,input_variables = ['text'])
-
-with st.sidebar:
-    groq_api_key = st.text_input("Groq API Key",value="",type="password")
-generic_url = st.text_input("URL",label_visibility="collapsed")
+generic_url = st.text_input("URL", label_visibility="collapsed")
 
 prompt_template = """
 Provide a summary of the following content in 300 words:
@@ -42,7 +29,7 @@ if st.button("Summarize the content from YT or Website"):
         st.error("Please enter a valid URL. It may be a YT video URL or Website URL...")
     else:
         try:
-            llm = ChatGroq(model="llama-3.3-70b-versatile", api_key=groq_api_key)  # ✅ ab yahan, key mil chuki hogi
+            llm = ChatGroq(model="llama-3.3-70b-versatile", api_key=groq_api_key)
             with st.spinner("Waiting...."):
                 if "youtube.com" in generic_url:
                     loader = YoutubeLoader.from_youtube_url(generic_url)
@@ -62,5 +49,3 @@ if st.button("Summarize the content from YT or Website"):
                 st.success(output_summary)
         except Exception as e:
             st.exception(f"Exception:{e}")
-
-                    
